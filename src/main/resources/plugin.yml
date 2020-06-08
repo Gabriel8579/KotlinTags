@@ -1,0 +1,12 @@
+name: KotlinTags
+main: com.gabriel8579.KotlinTags.Main
+version: 1.0-SNAPSHOT
+
+commands:
+  tag:
+    permission: kotlintags.command.tag
+
+permissions:
+  kotlintags.command.tag:
+    description: "Permite executar o comando /tag"
+    default: true
