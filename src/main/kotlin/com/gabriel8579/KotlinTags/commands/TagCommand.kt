@@ -85,7 +85,7 @@ class TagCommand : CommandExecutor, TabCompleter {
                 } catch (e: NoSuchElementException) {
                     Main.INSTANCE.server.consoleSender.sendMessage("${sender.uniqueId} Tentou acessar a tag inexistente ${args?.get(0)}")
                 } finally {
-                    if (tag == null || !sender.hasPermission(tag.permission)) {
+                    if (tag == null || (tag.permission.isNotEmpty() && !sender.hasPermission(tag.permission))) {
                         sender.sendMessage("§cParece que a tag ${args?.get(0)} não existe...")
                         return true
                     }
