@@ -64,5 +64,7 @@ class Tag(
     }
 
     fun getChat(playerName: String): String = this.chat.replace("%player%", playerName)
+    fun getHead(playerName: String): String = this.headPrefix + playerName + this.headSuffix
+    fun getPlayerList(playerName: String): String = this.playerList.replace("%player%", playerName)
 
 }

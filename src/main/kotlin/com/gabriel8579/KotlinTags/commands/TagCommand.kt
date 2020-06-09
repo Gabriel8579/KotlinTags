@@ -3,6 +3,10 @@ package com.gabriel8579.KotlinTags.commands
 import com.gabriel8579.KotlinTags.Jogador
 import com.gabriel8579.KotlinTags.Main
 import com.gabriel8579.KotlinTags.Tag
+import net.md_5.bungee.api.chat.ClickEvent
+import net.md_5.bungee.api.chat.ComponentBuilder
+import net.md_5.bungee.api.chat.HoverEvent
+import net.md_5.bungee.api.chat.TextComponent
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
 import org.bukkit.command.CommandSender
@@ -26,7 +30,14 @@ class TagCommand : CommandExecutor, TabCompleter {
 
             if (args?.size == 0) {
                 sender.sendMessage("§7Suas tags:")
-                Main.INSTANCE.jogadores[sender.uniqueId]?.tags?.forEach { sender.sendMessage(it.getChat(it.id)) }
+                Main.INSTANCE.jogadores[sender.uniqueId]?.tags?.forEach {
+                    val textComponent = TextComponent(it.getChat(it.id))
+                    val hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("Clique para utilizar essa tag ou use o comando /tag ${it.id} \n\n§wChat: ${it.getChat(sender.name)} \n§wCabeça: ${it.getHead(sender.name)} \n§wLista de Jogadores: ${it.getPlayerList(sender.name)}").create())
+                    val clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/tag " + it.id)
+                    textComponent.hoverEvent = hoverEvent
+                    textComponent.clickEvent = clickEvent
+                    sender.spigot().sendMessage(textComponent)
+                }
                 return true
             }
 
@@ -45,7 +56,7 @@ class TagCommand : CommandExecutor, TabCompleter {
                     for (player in Main.INSTANCE.server.onlinePlayers) {
                         Main.INSTANCE.jogadores[player.uniqueId] = Jogador(HashSet())
                     }
-                    Main.INSTANCE.jogadores.forEach { (t, u) -> u.tags.removeAll(u.tags);
+                    Main.INSTANCE.jogadores.forEach { (t, u) -> u.tags.removeAll(u.tags)
                         Main.INSTANCE.tags.forEach {
                             if (it.permission.isEmpty() || Main.INSTANCE.server.getPlayer(t).hasPermission(it.permission)) {
                                 u.tags.add(it)
